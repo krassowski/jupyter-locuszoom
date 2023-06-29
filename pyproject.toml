@@ -52,6 +52,7 @@ test = [
     "nbval",
     "pytest-cov",
     "pytest>=6.0",
+    "pandas"
 ]
 
 [project.urls]

@@ -56,6 +56,10 @@ class LocusZoom(DOMWidget):
             start = locus.position - flank // 2
             end = locus.position + flank // 2
             chrom = locus.chr
+
+        start = max(1, start)
+        end = max(1, end)
+
         self.position = {
           'chr': str(chrom),
           'start': int(start),

@@ -7,8 +7,16 @@
 import pytest
 
 from ..locus_zoom import LocusZoom
+from pandas import DataFrame
 
 
 def test_example_creation_blank():
-    w = LocusZoom()
-    assert w.value == 'Hello World'
+    df = DataFrame([{
+        "CHROM": 1,
+        "POS": 10000,
+        "REF": 'A',
+        "ALT": 'C',
+        "P": 0.05
+    }])
+    w = LocusZoom(df)
+    assert w
