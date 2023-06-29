@@ -6,8 +6,9 @@
 
 from ipywidgets import DOMWidget
 from traitlets import Unicode, Integer, validate, observe, TraitError, Dict
-from pandas import DataFrame
-from typing import Dict as DictType
+from typing import Dict as DictType, TYPE_CHECKING
+if TYPE_CHECKING:
+    from pandas import DataFrame
 
 from ._frontend import module_name, module_version
 
