@@ -6,13 +6,13 @@ requires = [
 build-backend = "hatchling.build"
 
 [project]
-name = "jupyter_locuszoom"
+name = "jupyter-locuszoom"
 description = "Jupyter Widget for LocusZoom"
 readme = "README.md"
 license = { file = "LICENSE.txt" }
 requires-python = ">=3.7"
 authors = [
-    { name = "Michał Krassowski", email = "me@me.com" },
+    { name = "Michał Krassowski" },
 ]
 keywords = [
     "IPython",
@@ -65,10 +65,10 @@ artifacts = [
 ]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"jupyter_locuszoom/nbextension" = "share/jupyter/nbextensions/jupyter_locuszoom"
-"jupyter_locuszoom/labextension" = "share/jupyter/labextensions/jupyter_locuszoom"
-"./install.json" = "share/jupyter/labextensions/jupyter_locuszoom/install.json"
-"./jupyter_locuszoom.json" = "etc/jupyter/nbconfig/notebook.d/jupyter_locuszoom.json"
+"jupyter_locuszoom/nbextension" = "share/jupyter/nbextensions/jupyter-locuszoom"
+"jupyter_locuszoom/labextension" = "share/jupyter/labextensions/jupyter-locuszoom"
+"./install.json" = "share/jupyter/labextensions/jupyter-locuszoom/install.json"
+"./jupyter_locuszoom.json" = "etc/jupyter/nbconfig/notebook.d/jupyter-locuszoom.json"
 
 [tool.hatch.build.targets.sdist]
 exclude = [

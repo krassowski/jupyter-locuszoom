@@ -1,11 +1,46 @@
 
 # jupyter-locuszoom
 
-[![Build Status](https://travis-ci.org/krassowski/jupyter-locuszoom.svg?branch=master)](https://travis-ci.org/krassowski/jupyter_locuszoom)
-[![codecov](https://codecov.io/gh/krassowski/jupyter-locuszoom/branch/master/graph/badge.svg)](https://codecov.io/gh/krassowski/jupyter-locuszoom)
+[![Build Status](https://travis-ci.org/krassowski/jupyter-locuszoom.svg?branch=main)](https://travis-ci.org/krassowski/jupyter_locuszoom)
+[![codecov](https://codecov.io/gh/krassowski/jupyter-locuszoom/branch/main/graph/badge.svg)](https://codecov.io/gh/krassowski/jupyter-locuszoom)
 
 
 Jupyter Widget for LocusZoom
+
+## Usage
+
+Import `LocusZoom` in a notebook cell:
+
+```python
+# should it be renamed to ipylocuszoom? Let me know!
+from jupyter_locuszoom import LocusZoom
+```
+
+and then use it with a GWAS result DataFrame which has to include columns `CHROM`, `REF`, `ALT`, `POS`, `P` (or `LOG10_P`):
+
+```python
+LocusZoom(
+    assoc,
+    chrom='15',    # optional (if not given top locus will be shown)
+    start=0,       # optional (if nto given top locus on given chromosome will be shown)
+    end=100_000,   # optional, but has to be given if start was given
+    build='GRCh38'
+)
+```
+
+![Screenshot from 2023-06-29 15-30-43](https://github.com/krassowski/jupyter-locuszoom/assets/5832902/42fb1adf-825e-4afb-a915-f0efbfaf4d10)
+
+Alternatively, center on a specific position:
+
+```python
+LocusZoom(
+    assoc,
+    chrom='15',
+    position=123_456,
+    flank=100_000,
+    build='GRCh38'
+)
+```
 
 ## Installation
 

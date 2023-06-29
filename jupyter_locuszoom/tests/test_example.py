@@ -6,9 +6,9 @@
 
 import pytest
 
-from ..example import ExampleWidget
+from ..locus_zoom import LocusZoom
 
 
 def test_example_creation_blank():
-    w = ExampleWidget()
+    w = LocusZoom()
     assert w.value == 'Hello World'
