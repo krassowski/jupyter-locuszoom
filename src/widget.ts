@@ -34,7 +34,7 @@ export class LocusZoomModel extends DOMWidgetModel {
         start: 0,
         end: 5000000,
       },
-      _associations_view: {}
+      _associations_view: {},
     };
   }
 
@@ -59,10 +59,9 @@ interface IRequestOptions {
 
 const AssociationLZ = LocusZoom.Adapters.get('AssociationLZ');
 
-
 class ModelAssociation extends AssociationLZ {
   model: LocusZoomModel;
-  constructor(config: {model: LocusZoomModel}) {
+  constructor(config: { model: LocusZoomModel }) {
     super({});
     this.model = config.model;
   }
@@ -85,13 +84,12 @@ class ModelAssociation extends AssociationLZ {
     */
     return {
       data: this.model.get('_associations_view'),
-      lastPage: 100
+      lastPage: 100,
     };
   }
 }
 // A custom adapter should be added to the registry before using it
 LocusZoom.Adapters.add('ModelAssociation', ModelAssociation);
-
 
 export class LocusZoomView extends DOMWidgetView {
   container: HTMLDivElement;
@@ -102,47 +100,66 @@ export class LocusZoomView extends DOMWidgetView {
     this.container.id = 'locus-zoom-' + UUID.uuid4();
     this.el.appendChild(this.container);
   }
-   _processLuminoMessage(msg: Message, _super: (msg: Message) => void): void {
-       _super.call(this, msg);
-       switch (msg.type) {
-         case 'resize':
-           console.log('resize message')
-           window.requestAnimationFrame(() => this.plot.rescaleSVG());
-           break;
-       }
+  _processLuminoMessage(msg: Message, _super: (msg: Message) => void): void {
+    _super.call(this, msg);
+    switch (msg.type) {
+      case 'resize':
+        console.log('resize message');
+        window.requestAnimationFrame(() => this.plot.rescaleSVG());
+        break;
+    }
   }
   processPhosphorMessage(msg: Message): void {
-     this._processLuminoMessage(msg, super.processLuminoMessage);
- }
+    this._processLuminoMessage(msg, super.processLuminoMessage);
+  }
 
- processLuminoMessage(msg: Message): void {
-     this._processLuminoMessage(msg, super.processLuminoMessage);
- }
+  processLuminoMessage(msg: Message): void {
+    this._processLuminoMessage(msg, super.processLuminoMessage);
+  }
   render() {
-    const apiBase = "https://portaldev.sph.umich.edu/api/v1/";
+    const apiBase = 'https://portaldev.sph.umich.edu/api/v1/';
     const build = this.model.get('build');
 
-    var dataSources = new LocusZoom.DataSources();
+    const dataSources = new LocusZoom.DataSources();
     dataSources
-      .add("assoc", ["ModelAssociation", { model: this.model }])
-      .add("ld", ["LDServer", { url: "https://portaldev.sph.umich.edu/ld/", source: '1000G', build, population: 'ALL' }])
-      .add("gene", ["GeneLZ", { url: apiBase + "annotation/genes/", build }])
-      .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", build }])
-      .add("constraint", ["GeneConstraintLZ", { url: "https://gnomad.broadinstitute.org/api/", build }])
-      // TODO:
-      //.add("phewas", ["PheWASLZ", {url: "https://portaldev.sph.umich.edu/" + "api/v1/statistic/phewas/", build: [build]}])
-    ;
+      .add('assoc', ['ModelAssociation', { model: this.model }])
+      .add('ld', [
+        'LDServer',
+        {
+          url: 'https://portaldev.sph.umich.edu/ld/',
+          source: '1000G',
+          build,
+          population: 'ALL',
+        },
+      ])
+      .add('gene', ['GeneLZ', { url: apiBase + 'annotation/genes/', build }])
+      .add('recomb', [
+        'RecombLZ',
+        { url: apiBase + 'annotation/recomb/results/', build },
+      ])
+      .add('constraint', [
+        'GeneConstraintLZ',
+        { url: 'https://gnomad.broadinstitute.org/api/', build },
+      ]);
+    // TODO:
+    //.add("phewas", ["PheWASLZ", {url: "https://portaldev.sph.umich.edu/" + "api/v1/statistic/phewas/", build: [build]}])
 
     const initialState = this.positionState;
     console.log(initialState);
-    const layout = LocusZoom.Layouts.get("plot", "standard_association", {state: initialState});
+    const layout = LocusZoom.Layouts.get('plot', 'standard_association', {
+      state: initialState,
+    });
 
     // d3 assumes the node is already in the DOM and will fail if we do not attach it temporarily.
     const attached = this.el.parentElement !== null;
     if (!attached) {
       document.body.appendChild(this.el);
     }
-    const plot = LocusZoom.populate("#" + this.container.id, dataSources, layout);
+    const plot = LocusZoom.populate(
+      '#' + this.container.id,
+      dataSources,
+      layout
+    );
     if (!attached) {
       document.body.removeChild(this.el);
     }
@@ -152,23 +169,28 @@ export class LocusZoomView extends DOMWidgetView {
       console.log('state changed');
       const position = this.model.get('position');
       if (
-        plot.state.start == position.start
-        &&
-        plot.state.end == position.end
-        &&
-        plot.state.chr == position.chr
+        plot.state.start === position.start &&
+        plot.state.end === position.end &&
+        plot.state.chr === position.chr
       ) {
         return;
       }
-      console.log('plot state changed, will set kernel state to',  plot.state)
-      this.model.set('position', {start: plot.state.start, end: plot.state.end, chr: plot.state.chr});
+      console.log('plot state changed, will set kernel state to', plot.state);
+      this.model.set('position', {
+        start: plot.state.start,
+        end: plot.state.end,
+        chr: plot.state.chr,
+      });
       this.model.save_changes();
     });
 
     const updateState = () => {
-      console.log('kernel state changed, will set state to ', this.positionState);
-      plot.applyState({ ...this.positionState, ldrefvar: "" });
-    }
+      console.log(
+        'kernel state changed, will set state to ',
+        this.positionState
+      );
+      plot.applyState({ ...this.positionState, ldrefvar: '' });
+    };
 
     // listen to changes of state in kernel and update view accordingly
     this.model.on('change:position', updateState);
