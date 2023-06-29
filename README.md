@@ -28,7 +28,7 @@ LocusZoom(
 )
 ```
 
-![Screenshot from 2023-06-29 15-30-43](https://github.com/krassowski/jupyter-locuszoom/assets/5832902/42fb1adf-825e-4afb-a915-f0efbfaf4d10)
+![Example](https://github.com/krassowski/jupyter-locuszoom/assets/5832902/f7ee35fc-7024-477c-b411-c28670eed8cc)
 
 Alternatively, center on a specific position:
 
