@@ -1,9 +1,9 @@
 
 # jupyter-locuszoom
 
+![Extension status](https://img.shields.io/badge/status-draft-critical "Draft")
 [![Build Status](https://travis-ci.org/krassowski/jupyter-locuszoom.svg?branch=main)](https://travis-ci.org/krassowski/jupyter_locuszoom)
-[![codecov](https://codecov.io/gh/krassowski/jupyter-locuszoom/branch/main/graph/badge.svg)](https://codecov.io/gh/krassowski/jupyter-locuszoom)
-
+[![PyPI](https://img.shields.io/pypi/v/jupyter-locuszoom)](https://pypi.org/project/jupyter-locuszoom)
 
 Jupyter Widget for LocusZoom
 
