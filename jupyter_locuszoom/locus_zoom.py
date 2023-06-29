@@ -9,6 +9,8 @@ from traitlets import Unicode, Integer, validate, observe, TraitError, Dict
 from typing import Dict as DictType, TYPE_CHECKING
 if TYPE_CHECKING:
     from pandas import DataFrame
+else:
+    DataFrame = None
 
 from ._frontend import module_name, module_version
 
