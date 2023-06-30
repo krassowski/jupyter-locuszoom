@@ -92,8 +92,9 @@ class LocusZoom(DOMWidget):
         for required_column in required_columns:
             if required_column not in associations.columns:
               raise ValueError(f'Required column missing: {required_column}')
-        # harmonise type
+        # harmonise type - TODO do not cast if already string
         associations['chr'] = associations['chr'].astype(str)
+        # TODO: coerce position to integer if not already
         if 'log_pvalue' not in associations.columns:
             if 'pvalue' in associations.columns:
                 from math import log10
@@ -110,18 +111,23 @@ class LocusZoom(DOMWidget):
         # not needed, but could be fun to implement multi-analysis
         # associations['analysis'] = 0
         self._associations = associations
+        self._by_chrom = associations.groupby('chr')
         #self._update_view();
 
     def _update_view(self):
         # TODO use tabix?
-        filtered = self._associations[
-          (self._associations.chr == self.position['chr'])
+        query_range = self.position
+        df = self._by_chrom.get_group(query_range['chr'])
+        filtered = df[
+          (df.position >= query_range['start'])
           &
-          (self._associations.position >= self.position['start'])
-          &
-          (self._associations.position <= self.position['end'])
+          (df.position <= query_range['end'])
         ]
-        self._associations_view = filtered.to_dict(orient='list')
+        data_dict = {
+          'data': filtered.to_dict(orient='list'),
+          'range': query_range
+        }
+        self._associations_view = data_dict
 
     _associations_view = Dict().tag(sync=True)
     build = Unicode('GRCh38').tag(sync=True)

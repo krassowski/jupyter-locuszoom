@@ -12,7 +12,7 @@ import { Message } from '@lumino/messaging';
 import LocusZoom from 'locuszoom';
 
 import { MODULE_NAME, MODULE_VERSION } from './version';
-//import { untilReady } from './utils';
+import { untilReady } from './utils';
 
 // Import the CSS
 import 'locuszoom/dist/locuszoom.css';
@@ -34,7 +34,13 @@ export class LocusZoomModel extends DOMWidgetModel {
         start: 0,
         end: 5000000,
       },
-      _associations_view: {},
+      _associations_view: {
+        range: {
+          chr: '1',
+          start: 0,
+          end: 5000000,
+        },
+      },
     };
   }
 
@@ -68,24 +74,16 @@ class ModelAssociation extends AssociationLZ {
 
   async _performRequest(options: IRequestOptions) {
     // TODO: find a way to fetch view properly
-    /**
-    console.log('performing request', options);
     await untilReady(() => {
-      const position = this.model.get('position');
+      const view = this.model.get('_associations_view');
+      const position = view.range;
       return (
-        position.chr === options.chr
-        &&
-        position.start === options.start
-        &&
+        position.chr === options.chr &&
+        position.start === options.start &&
         position.end === options.end
-        )
-    })
-    console.log('got it!');
-    */
-    return {
-      data: this.model.get('_associations_view'),
-      lastPage: 100,
-    };
+      );
+    });
+    return this.model.get('_associations_view');
   }
 }
 // A custom adapter should be added to the registry before using it
@@ -110,7 +108,9 @@ export class LocusZoomView extends DOMWidgetView {
     }
   }
   processPhosphorMessage(msg: Message): void {
-    this._processLuminoMessage(msg, super.processLuminoMessage);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    this._processLuminoMessage(msg, super.processPhosphorMessage);
   }
 
   processLuminoMessage(msg: Message): void {
@@ -166,7 +166,6 @@ export class LocusZoomView extends DOMWidgetView {
     this.plot = plot;
 
     plot.on('state_changed', () => {
-      console.log('state changed');
       const position = this.model.get('position');
       if (
         plot.state.start === position.start &&
